@@ -1,5 +1,5 @@
-# kid-to-adult-ai
-This project is about generation professional images of young children.
+# Kid To Adult AI
+This project is about generating professional images of young children.
 
 ## Developed by 
 
