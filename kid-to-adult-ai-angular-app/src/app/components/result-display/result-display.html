@@ -1,0 +1,238 @@
+<div class="result-display-container" *ngIf="originalImage || generatedImage || isLoading">
+    <mat-card class="result-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon class="header-icon">auto_awesome</mat-icon>
+          Generated Result
+        </mat-card-title>
+        <mat-card-subtitle *ngIf="status">{{ status }}</mat-card-subtitle>
+        <mat-card-subtitle *ngIf="!status && profession">
+          {{ profession | titlecase }} at age {{ age }}
+        </mat-card-subtitle>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <!-- Loading State -->
+        <div *ngIf="isLoading" class="loading-state">
+          <div class="loading-content">
+            <div class="spinner-container">
+              <mat-progress-spinner 
+                mode="determinate" 
+                [value]="progress"
+                diameter="80">
+              </mat-progress-spinner>
+              <div class="progress-text">{{ progress }}%</div>
+            </div>
+            
+            <div class="loading-details">
+              <h3>Generating Your Image</h3>
+              <p class="progress-description">{{ getProgressText() }}</p>
+              
+              <div class="loading-steps">
+                <div class="step" [class.active]="progress >= 20">
+                  <mat-icon>image</mat-icon>
+                  <span>Processing Image</span>
+                </div>
+                <div class="step" [class.active]="progress >= 40">
+                  <mat-icon>face</mat-icon>
+                  <span>Generating Face</span>
+                </div>
+                <div class="step" [class.active]="progress >= 60">
+                  <mat-icon>work</mat-icon>
+                  <span>Adding Profession</span>
+                </div>
+                <div class="step" [class.active]="progress >= 80">
+                  <mat-icon>palette</mat-icon>
+                  <span>Applying Effects</span>
+                </div>
+                <div class="step" [class.active]="progress >= 100">
+                  <mat-icon>check_circle</mat-icon>
+                  <span>Complete</span>
+                </div>
+              </div>
+              
+              <div class="loading-hint">
+                <mat-icon>info</mat-icon>
+                <span>This may take 30-60 seconds. Please don't close this window.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Result State -->
+        <div *ngIf="!isLoading && generatedImage" class="result-state">
+          <!-- View Toggle -->
+          <div class="view-toggle">
+            <button 
+              mat-stroked-button 
+              [class.active]="showComparison"
+              (click)="toggleComparison()">
+              <mat-icon>compare</mat-icon>
+              Compare
+            </button>
+            <button 
+              mat-stroked-button 
+              [class.active]="!showComparison"
+              (click)="toggleComparison()">
+              <mat-icon>photo</mat-icon>
+              Single View
+            </button>
+          </div>
+          
+          <!-- Image Display -->
+          <div class="image-display">
+            <!-- Comparison View -->
+            <div *ngIf="showComparison" class="comparison-view">
+              <div class="comparison-image original-image">
+                <div class="image-header">
+                  <h4>Original</h4>
+                  <span class="image-badge">Child</span>
+                </div>
+                <div class="image-container">
+                  <img [src]="originalImage" alt="Original photo" [class]="getFilterClass()">
+                  <div class="image-overlay">
+                    <p>Original photo</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="comparison-separator">
+                <div class="separator-line"></div>
+                <div class="separator-icon">
+                  <mat-icon>arrow_forward</mat-icon>
+                </div>
+                <div class="separator-text">to</div>
+              </div>
+              
+              <div class="comparison-image generated-image">
+                <div class="image-header">
+                  <h4>Generated</h4>
+                  <span class="image-badge profession-badge">
+                    <mat-icon>work</mat-icon>
+                    {{ profession | titlecase }}
+                  </span>
+                </div>
+                <div class="image-container">
+                  <img [src]="generatedImage" alt="Generated photo" [class]="getFilterClass()">
+                  <div class="image-overlay">
+                    <p>Age {{ age }} | {{ profession | titlecase }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Single View -->
+            <div *ngIf="!showComparison" class="single-view">
+              <div class="single-image-container">
+                <img [src]="generatedImage" alt="Generated photo" [class]="getFilterClass()">
+                <div class="image-caption">
+                  <h3>{{ profession | titlecase }} at Age {{ age }}</h3>
+                  <p>AI-generated adult version</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Filters -->
+          <div class="filter-section">
+            <h4><mat-icon>palette</mat-icon> Apply Filter</h4>
+            <div class="filter-options">
+              <button 
+                *ngFor="let filter of imageFilters"
+                mat-stroked-button 
+                [class.active]="selectedFilter === filter.id"
+                (click)="applyFilter(filter.id)">
+                <mat-icon>{{ filter.icon }}</mat-icon>
+                {{ filter.name }}
+              </button>
+            </div>
+          </div>
+          
+          <!-- Result Details -->
+          <div class="result-details">
+            <mat-divider></mat-divider>
+            
+            <div class="details-grid">
+              <div class="detail-item">
+                <mat-icon>schedule</mat-icon>
+                <div>
+                  <span class="detail-label">Age Generated</span>
+                  <span class="detail-value">{{ age }} years</span>
+                </div>
+              </div>
+              
+              <div class="detail-item">
+                <mat-icon>work</mat-icon>
+                <div>
+                  <span class="detail-label">Profession</span>
+                  <span class="detail-value">{{ profession | titlecase }}</span>
+                </div>
+              </div>
+              
+              <div class="detail-item">
+                <mat-icon>image</mat-icon>
+                <div>
+                  <span class="detail-label">Resolution</span>
+                  <span class="detail-value">HD (1024×1024)</span>
+                </div>
+              </div>
+              
+              <div class="detail-item">
+                <mat-icon>update</mat-icon>
+                <div>
+                  <span class="detail-label">Generation Time</span>
+                  <span class="detail-value">~45 seconds</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <button mat-raised-button color="primary" class="action-button" (click)="onDownload()">
+              <mat-icon>download</mat-icon>
+              Download HD
+            </button>
+            
+            <button mat-raised-button color="accent" class="action-button" (click)="onRegenerate()">
+              <mat-icon>autorenew</mat-icon>
+              Regenerate
+            </button>
+            
+            <button mat-stroked-button color="primary" class="action-button" (click)="copyImageUrl()">
+              <mat-icon>content_copy</mat-icon>
+              Copy URL
+            </button>
+            
+            <button mat-stroked-button color="warn" class="action-button" (click)="onClear()">
+              <mat-icon>close</mat-icon>
+              Clear
+            </button>
+          </div>
+          
+          <!-- Share Section -->
+          <div class="share-section">
+            <h4><mat-icon>share</mat-icon> Share Result</h4>
+            <div class="share-buttons">
+              <button 
+                *ngFor="let option of shareOptions"
+                mat-mini-fab 
+                [style.background-color]="option.color"
+                (click)="onShare(option.platform)">
+                <mat-icon>{{ option.icon }}</mat-icon>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Generation Info -->
+          <div class="generation-info">
+            <mat-icon>info</mat-icon>
+            <p>
+              This image was generated using AI technology. 
+              Results may vary based on input quality and AI model performance.
+            </p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>

@@ -1,0 +1,88 @@
+<div class="image-upload-container">
+    <mat-card class="upload-card" [class.dragging]="isDragging">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon class="header-icon">photo_camera</mat-icon>
+          Upload Photo
+        </mat-card-title>
+        <mat-card-subtitle>Upload a clear photo of a child's face for best results</mat-card-subtitle>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <mat-form-field appearance="outline" class="file-input-field">
+          <div 
+            class="upload-area"
+            [class.has-image]="previewUrl"
+            (dragover)="onDragOver($event)"
+            (dragleave)="onDragLeave($event)"
+            (drop)="onDrop($event)"
+            (click)="!previewUrl && triggerFileInput()">
+            
+              <input 
+                #fileInput
+                id="fileInput"
+                type="file" 
+                accept="image/*"
+                (change)="onFileSelected($event)"
+                hidden>
+            
+            <div *ngIf="!previewUrl" class="upload-placeholder">
+              <div class="upload-icon-container">
+                <mat-icon class="upload-icon">cloud_upload</mat-icon>
+                <div class="upload-icon-bg"></div>
+              </div>
+              <h3>Drag & Drop or Click to Upload</h3>
+              <p class="upload-hint">Supports JPEG, PNG, WebP (Max 5MB)</p>
+              <button mat-stroked-button color="primary" class="browse-button">
+                <mat-icon>folder_open</mat-icon>
+                Browse Files
+              </button>
+            </div>
+            
+            <div *ngIf="previewUrl" class="image-preview-container">
+              <div class="preview-header">
+                <span class="preview-title">Preview</span>
+                <button mat-icon-button color="warn" (click)="removeImage()" class="remove-button">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+              <div class="image-wrapper">
+                <img [src]="previewUrl" alt="Uploaded image" class="preview-image">
+                <div class="image-overlay">
+                  <button mat-icon-button class="overlay-button" (click)="triggerFileInput()">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                </div>
+              </div>
+              <div class="image-info" *ngIf="selectedFile">
+                <mat-icon>info</mat-icon>
+                <span>{{ selectedFile!.name }} ({{ getFileSize(selectedFile!.size) }})</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="upload-tips" *ngIf="!previewUrl">
+            <h4><mat-icon>lightbulb</mat-icon> Tips for Best Results:</h4>
+            <ul>
+              <li>Use a clear, well-lit photo</li>
+              <li>Face should be clearly visible</li>
+              <li>Remove hats or sunglasses</li>
+              <li>Front-facing photos work best</li>
+              <li>High resolution images preferred</li>
+            </ul>
+          </div>
+        </mat-form-field>
+      </mat-card-content>
+      
+      <mat-card-actions *ngIf="previewUrl">
+        <button mat-button color="primary" (click)="triggerFileInput()">
+          <mat-icon>swap_horiz</mat-icon>
+          Change Image
+        </button>
+        <button mat-button color="warn" (click)="removeImage()">
+          <mat-icon>delete</mat-icon>
+          Remove
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>

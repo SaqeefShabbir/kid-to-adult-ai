@@ -1,0 +1,171 @@
+  .app-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  }
+  
+  .toolbar-icon {
+    margin-right: 12px;
+  }
+  
+  .toolbar-spacer {
+    flex: 1 1 auto;
+  }
+  
+  .main-content {
+    max-width: 1400px;
+    margin: 24px auto;
+    padding: 0 20px;
+  }
+  
+  .upload-section, .controls-section, .result-section {
+    margin-bottom: 30px;
+  }
+  
+  .upload-card, .controls-card, .result-card {
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+  
+  .image-upload-area {
+    height: 300px;
+    border: 3px dashed #ccc;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.3s;
+    overflow: hidden;
+  }
+  
+  .image-upload-area:hover {
+    border-color: #3f51b5;
+  }
+  
+  .upload-placeholder {
+    text-align: center;
+    color: #666;
+  }
+  
+  .upload-icon {
+    font-size: 64px;
+    height: 64px;
+    width: 64px;
+    margin-bottom: 16px;
+    color: #3f51b5;
+  }
+  
+  .upload-hint {
+    font-size: 12px;
+    color: #999;
+    margin-top: 8px;
+  }
+  
+  .image-preview {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .image-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  
+  .profession-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+  }
+  
+  .profession-card {
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .profession-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  .profession-card.selected {
+    border: 2px solid #3f51b5;
+    background-color: #f5f5f5;
+  }
+  
+  .age-slider {
+    margin: 30px 0;
+    padding: 0 20px;
+  }
+  
+  .generate-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    margin-top: 20px;
+  }
+  
+  .generate-button mat-icon {
+    margin-right: 8px;
+  }
+  
+  .loading-container {
+    text-align: center;
+    padding: 60px 0;
+  }
+  
+  .loading-container mat-progress-spinner {
+    margin: 0 auto 20px;
+  }
+  
+  .comparison-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    margin: 30px 0;
+  }
+  
+  .comparison-image {
+    text-align: center;
+    flex: 1;
+  }
+  
+  .comparison-image h3 {
+    margin-bottom: 16px;
+    color: #333;
+  }
+  
+  .comparison-image img {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  .comparison-arrow mat-icon {
+    font-size: 48px;
+    color: #3f51b5;
+  }
+  
+  .result-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 30px;
+  }
+  
+  @media (max-width: 768px) {
+    .comparison-container {
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .profession-grid {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+  }

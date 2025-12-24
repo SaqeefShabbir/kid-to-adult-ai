@@ -1,0 +1,146 @@
+<div class="profession-selector-container">
+    <mat-card class="selector-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon class="header-icon">work_outline</mat-icon>
+          Choose Future Profession
+        </mat-card-title>
+        <mat-card-subtitle>Select what your child could become in the future</mat-card-subtitle>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <!-- Search Bar -->
+        <div class="search-container">
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Search professions...</mat-label>
+            <!-- <input 
+              matInput 
+              [(ngModel)]="searchQuery" 
+              (ngModelChange)="onSearchChange($event)"
+              placeholder="Type to search"> -->
+            <mat-icon matPrefix>search</mat-icon>
+            <button 
+              *ngIf="searchQuery" 
+              matSuffix 
+              mat-icon-button 
+              (click)="clearSearch()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+        
+        <!-- Profession Grid -->
+        <div class="profession-grid" *ngIf="filteredProfessions.length > 0">
+          <div 
+            *ngFor="let profession of filteredProfessions"
+            class="profession-card"
+            [class.selected]="selectedProfession === profession.id"
+            (click)="selectProfession(profession.id)"
+            [matTooltip]="profession.description"
+            matTooltipPosition="above">
+            
+            <div class="profession-icon-container">
+              <mat-icon class="profession-icon">{{ profession.icon }}</mat-icon>
+              <div class="selection-indicator" *ngIf="selectedProfession === profession.id">
+                <mat-icon>check_circle</mat-icon>
+              </div>
+            </div>
+            
+            <h4 class="profession-name">{{ profession.name }}</h4>
+            <p class="profession-desc">{{ profession.description }}</p>
+            
+            <div class="profession-footer">
+              <span class="profession-badge">Select</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- No Results -->
+        <div *ngIf="filteredProfessions.length === 0" class="no-results">
+          <mat-icon>search_off</mat-icon>
+          <h3>No professions found</h3>
+          <p>Try a different search term</p>
+          <button mat-button color="primary" (click)="clearSearch()">
+            Show all professions
+          </button>
+        </div>
+        
+        <!-- Selected Profession Details -->
+        <div *ngIf="selectedProfessionData" class="selected-profession-details">
+          <mat-divider></mat-divider>
+          
+          <div class="details-header">
+            <h3>Selected Profession</h3>
+            <div class="selected-tag">
+              <mat-icon>check_circle</mat-icon>
+              <span>Selected</span>
+            </div>
+          </div>
+          
+          <div class="details-content">
+            <div class="details-icon">
+              <mat-icon>{{ selectedProfessionData!.icon }}</mat-icon>
+            </div>
+            <div class="details-text">
+              <h4>{{ selectedProfessionData!.name }}</h4>
+              <p>{{ selectedProfessionData!.description }}</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Age Selector -->
+        <div class="age-selector-container">
+          <mat-divider></mat-divider>
+          
+          <div class="age-selector-header">
+            <h3>
+              <mat-icon>schedule</mat-icon>
+              Target Age
+            </h3>
+            <span class="selected-age">{{ targetAge }} years</span>
+          </div>
+          
+          <div class="age-selector">
+            <!-- Age Slider -->
+            <div class="age-slider">
+              <mat-slider
+                min="20"
+                max="60"
+                step="5"
+                [(ngModel)]="targetAge"
+                (change)="onAgeChange(targetAge)"
+                thumbLabel
+                tickInterval="5">
+              </mat-slider>
+              <div class="age-labels">
+                <span>20</span>
+                <span>30</span>
+                <span>40</span>
+                <span>50</span>
+                <span>60</span>
+              </div>
+            </div>
+            
+            <!-- Quick Age Buttons -->
+            <div class="quick-age-buttons">
+              <span class="quick-age-label">Quick Select:</span>
+              <div class="age-buttons">
+                <button 
+                  *ngFor="let option of ageOptions"
+                  mat-stroked-button 
+                  [class.selected-age-btn]="targetAge === option.value"
+                  (click)="onAgeChange(option.value)">
+                  {{ option.label }}
+                </button>
+              </div>
+            </div>
+            
+            <div class="age-hint">
+              <mat-icon>info</mat-icon>
+              <span>This age will be used to generate the adult version of the photo</span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>

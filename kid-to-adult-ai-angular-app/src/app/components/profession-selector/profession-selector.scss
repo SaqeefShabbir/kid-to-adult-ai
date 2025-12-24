@@ -1,0 +1,337 @@
+  .profession-selector-container {
+    width: 100%;
+    margin-bottom: 24px;
+  }
+  
+  .selector-card {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+  
+  .header-icon {
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  
+  .search-container {
+    margin-bottom: 24px;
+  }
+  
+  .search-field {
+    width: 100%;
+  }
+  
+  .search-field .mat-form-field-wrapper {
+    border-radius: 12px;
+  }
+  
+  .profession-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+    max-height: 500px;
+    overflow-y: auto;
+    padding: 4px;
+  }
+  
+  .profession-card {
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: white;
+    position: relative;
+  }
+  
+  .profession-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border-color: #3f51b5;
+  }
+  
+  .profession-card.selected {
+    border-color: #3f51b5;
+    background-color: #f0f7ff;
+    box-shadow: 0 4px 15px rgba(63, 81, 181, 0.15);
+  }
+  
+  .profession-icon-container {
+    position: relative;
+    margin-bottom: 16px;
+  }
+  
+  .profession-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    color: #3f51b5;
+    background-color: rgba(63, 81, 181, 0.1);
+    padding: 12px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+  }
+  
+  .profession-card.selected .profession-icon {
+    background-color: #3f51b5;
+    color: white;
+  }
+  
+  .selection-indicator {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: white;
+    border-radius: 50%;
+    padding: 2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .selection-indicator mat-icon {
+    font-size: 20px;
+    height: 20px;
+    width: 20px;
+    color: #4caf50;
+  }
+  
+  .profession-name {
+    margin: 0 0 8px 0;
+    font-weight: 500;
+    color: #333;
+    font-size: 16px;
+  }
+  
+  .profession-desc {
+    margin: 0 0 16px 0;
+    color: #666;
+    font-size: 13px;
+    line-height: 1.4;
+    flex-grow: 1;
+  }
+  
+  .profession-footer {
+    width: 100%;
+  }
+  
+  .profession-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    background-color: #f5f5f5;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #666;
+    transition: all 0.3s ease;
+  }
+  
+  .profession-card.selected .profession-badge {
+    background-color: #3f51b5;
+    color: white;
+  }
+  
+  .no-results {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+  }
+  
+  .no-results mat-icon {
+    font-size: 64px;
+    height: 64px;
+    width: 64px;
+    margin-bottom: 16px;
+    color: #ccc;
+  }
+  
+  .no-results h3 {
+    margin: 0 0 8px 0;
+    color: #333;
+  }
+  
+  .selected-profession-details {
+    margin-top: 24px;
+    padding-top: 24px;
+  }
+  
+  .details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .details-header h3 {
+    margin: 0;
+    color: #333;
+  }
+  
+  .selected-tag {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .selected-tag mat-icon {
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+  }
+  
+  .details-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+  }
+  
+  .details-icon mat-icon {
+    font-size: 56px;
+    height: 56px;
+    width: 56px;
+    color: #3f51b5;
+  }
+  
+  .details-text h4 {
+    margin: 0 0 8px 0;
+    color: #333;
+    font-size: 18px;
+  }
+  
+  .details-text p {
+    margin: 0;
+    color: #666;
+    line-height: 1.5;
+  }
+  
+  .age-selector-container {
+    margin-top: 32px;
+  }
+  
+  .age-selector-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+  }
+  
+  .age-selector-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    color: #333;
+  }
+  
+  .age-selector-header h3 mat-icon {
+    color: #ff9800;
+  }
+  
+  .selected-age {
+    font-size: 20px;
+    font-weight: bold;
+    color: #3f51b5;
+    background-color: rgba(63, 81, 181, 0.1);
+    padding: 8px 16px;
+    border-radius: 20px;
+  }
+  
+  .age-slider {
+    margin: 30px 0;
+    padding: 0 20px;
+  }
+  
+  .age-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    color: #666;
+    font-size: 12px;
+  }
+  
+  .quick-age-buttons {
+    margin: 24px 0;
+  }
+  
+  .quick-age-label {
+    display: block;
+    margin-bottom: 12px;
+    color: #666;
+    font-weight: 500;
+  }
+  
+  .age-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .age-buttons button {
+    border-radius: 20px;
+    padding: 6px 16px;
+    transition: all 0.3s ease;
+  }
+  
+  .age-buttons button.selected-age-btn {
+    background-color: #3f51b5;
+    color: white;
+    border-color: #3f51b5;
+  }
+  
+  .age-hint {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background-color: #e3f2fd;
+    border-radius: 8px;
+    margin-top: 20px;
+    color: #1976d2;
+  }
+  
+  .age-hint mat-icon {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+  }
+  
+  .age-hint span {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  
+  @media (max-width: 768px) {
+    .profession-grid {
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      max-height: 400px;
+    }
+    
+    .details-content {
+      flex-direction: column;
+      text-align: center;
+      gap: 16px;
+    }
+    
+    .age-buttons {
+      justify-content: center;
+    }
+    
+    .age-selector-header {
+      flex-direction: column;
+      gap: 12px;
+      text-align: center;
+    }
+  }

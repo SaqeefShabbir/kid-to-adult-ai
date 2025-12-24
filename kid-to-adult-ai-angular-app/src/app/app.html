@@ -1,0 +1,60 @@
+<div class="app-container">
+  <!-- Header -->
+  <mat-toolbar color="primary">
+    <span>{{title}}</span>
+  </mat-toolbar>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Step 1: Image Upload -->
+    <div class="step-section">
+      <h2>Step 1: Upload Photo</h2>
+      <app-image-upload
+        (imageSelected)="onImageSelected($event)"
+        (imagePreview)="onImagePreview($event)"
+        [previewUrl]="originalImageUrl">
+      </app-image-upload>
+    </div>
+
+    <!-- Step 2: Profession Selection (only show if image is uploaded) -->
+    <div *ngIf="selectedImage" class="step-section">
+      <h2>Step 2: Choose Future</h2>
+      <app-profession-selector
+        [selectedProfession]="selectedProfession"
+        [targetAge]="targetAge"
+        (professionSelected)="onProfessionSelected($event)"
+        (ageChanged)="onAgeChanged($event)">
+      </app-profession-selector>
+      
+      <!-- Generate Button -->
+      <div class="generate-button-container">
+        <button 
+          mat-raised-button 
+          color="primary" 
+          (click)="startGeneration()"
+          [disabled]="isLoading">
+          <mat-icon>auto_awesome</mat-icon>
+          Generate Adult Version
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 3: Results (only show if generating or has results) -->
+    <div *ngIf="isLoading || generatedImageUrl" class="step-section">
+      <h2>Step 3: Results</h2>
+      <app-result-display
+        [originalImage]="originalImageUrl"
+        [generatedImage]="generatedImageUrl"
+        [profession]="selectedProfession"
+        [age]="targetAge"
+        [isLoading]="isLoading"
+        [progress]="generationProgress"
+        [status]="generationStatus"
+        (regenerate)="onRegenerate()"
+        (download)="onDownload($event)"
+        (share)="onShare($event)"
+        (clear)="onClear()">
+      </app-result-display>
+    </div>
+  </div>
+</div>
