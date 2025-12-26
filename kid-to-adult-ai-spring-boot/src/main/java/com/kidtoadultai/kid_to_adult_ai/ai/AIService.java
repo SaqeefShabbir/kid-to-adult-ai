@@ -62,8 +62,8 @@ public class AIService {
         headers.set("Authorization", "Token " + replicateApiKey);
 
         Map<String, Object> requestBody = new HashMap<>();
-//       requestBody.put("version", "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b");
-        requestBody.put("version", "google/imagen-4");
+        requestBody.put("version", "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b");
+//        requestBody.put("version", "google/imagen-4");
 
         Map<String, Object> input = new HashMap<>();
         input.put("prompt", prompt);
@@ -85,7 +85,7 @@ public class AIService {
 
         if (response.getStatusCode() == HttpStatus.CREATED) {
             Map<String, Object> responseBody = response.getBody();
-            return (String) ((Map<String, Object>) responseBody.get("output")).get("image_url");
+            return (String) ((Map<String, Object>) responseBody.get("urls")).get("stream");
         }
 
         throw new RuntimeException("Failed to generate image");
