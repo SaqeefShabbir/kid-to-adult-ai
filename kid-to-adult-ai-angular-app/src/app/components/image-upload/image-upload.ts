@@ -5,10 +5,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-image-upload',
-    imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, MatFormFieldModule],
+    imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule],
   templateUrl: './image-upload.html',
   styleUrl: './image-upload.scss',
 })

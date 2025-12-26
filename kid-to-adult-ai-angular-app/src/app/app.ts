@@ -46,6 +46,7 @@ export class App {
   targetAge: number = 30;
   originalImageUrl: string | null = null;
   generatedImageUrl: string | null = null;
+  
   isLoading: boolean = false;
   generationProgress: number = 0;
   generationStatus: string = '';
@@ -94,7 +95,8 @@ export class App {
     this.imageService.uploadImage(request).subscribe({
       next: (response) => {
         this.currentJobId = response.jobId;
-        this.generationStatus = response.message;
+        this.generationStatus = response.message!;
+        this.generationProgress = 20; // Initial progress
         this.pollStatus();
       },
       error: (error) => {
@@ -110,18 +112,46 @@ export class App {
     const interval = setInterval(() => {
       this.imageService.checkStatus(this.currentJobId!).subscribe({
         next: (response) => {
-          this.generationStatus = response.message;
-          
-          if (response.status === 'COMPLETED' && response.imageUrl) {
-            this.isLoading = false;
-            this.resultImage = response.imageUrl;
-            this.generationStatus = 'Generation completed!';
-            clearInterval(interval);
-          } else if (response.status === 'FAILED') {
-            this.isLoading = false;
-            this.showError('Generation failed');
-            clearInterval(interval);
+          this.generationStatus = response.message!;
+
+          if (response.progress !== undefined) {
+            this.generationProgress = response.progress;
           }
+          
+          switch (response.status) {
+            case 'COMPLETED':
+              setTimeout(() => { 
+                this.isLoading = false;
+                this.generatedImageUrl = response.imageUrl || null;
+                this.generationProgress = 100;
+                this.generationStatus = 'Generation completed!';
+                this.showSuccess('Image generated successfully!');
+                clearInterval(interval);
+
+                this.changeDetectorRef.detectChanges();
+              });
+              break;
+
+              case 'FAILED':
+                setTimeout(() => {
+                  this.isLoading = false;
+                  this.generationProgress = 0;
+                  this.generationStatus = 'Generation failed';
+                  this.showError(response.message || 'Generation failed');
+                  clearInterval(interval);
+
+                  this.changeDetectorRef.detectChanges();
+                });
+                break;
+                
+              case 'PROCESSING':
+                setTimeout(() => {
+                  if (!response.progress && this.generationProgress < 90) {
+                    this.generationProgress += 5;
+                  }
+                });
+                break;
+            }
         },
         error: (error) => {
           clearInterval(interval);
@@ -129,7 +159,7 @@ export class App {
           this.showError('Error checking status');
         }
       });
-    }, 3000); 
+    }, 500); 
   }
 
   onRegenerate() {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { BehaviorSubject, interval, Observable, of } from 'rxjs';
+import { catchError, map, switchMap, takeWhile } from 'rxjs/operators';
 
 export interface Profession {
   id: string;
@@ -19,15 +19,37 @@ export interface GenerationRequest {
 export interface GenerationResponse {
   jobId: string;
   status: string;
+  message?: string;
   imageUrl?: string;
-  message: string;
+  profession?: string;
+  age?: number;
+  progress?: number;
+  createdAt?: Date;
+  completedAt?: Date;
+  errorCode?: string;
+  errorDetails?: string;
+}
+
+export interface JobStatus {
+  jobId: string;
+  status: string;
+  imageUrl?: string;
+  profession: string;
+  targetAge: number;
+  originalFilename: string;
+  generatedFilename?: string;
+  errorMessage?: string;
+  createdAt: Date;
+  startedAt?: Date;
+  completedAt?: Date;
+  processingTime?: number;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class ImageService {
-  private apiUrl = 'http://localhost:8080/api/images';
+  private apiUrl = 'http://localhost:8080/api/stable-diffusion';
 
   constructor(private http: HttpClient) { }
 
@@ -77,11 +99,75 @@ export class ImageService {
     formData.append('image', request.image);
     formData.append('profession', request.profession);
     formData.append('age', request.age.toString());
-
-    return this.http.post<GenerationResponse>(`${this.apiUrl}/upload`, formData);
+    
+    return this.http.post<GenerationResponse>(
+      `${this.apiUrl}/generate`, 
+      formData
+    ).pipe(
+      map(response => {
+        return response;
+      })
+    );
   }
 
   checkStatus(jobId: string): Observable<GenerationResponse> {
-    return this.http.get<GenerationResponse>(`${this.apiUrl}/status/${jobId}`);
+    return this.http.get<GenerationResponse>(
+      `${this.apiUrl}/status/${jobId}`
+    );
+  }
+
+  pollStatus(jobId: string, intervalMs: number = 2000): Observable<GenerationResponse> {
+    return interval(intervalMs).pipe(
+      switchMap(() => this.checkStatus(jobId)),
+      takeWhile(response => 
+        response.status === 'PROCESSING' || 
+        (response.status !== 'COMPLETED' && response.status !== 'FAILED'), 
+        true
+      ),
+      catchError(error => {
+        const errorResponse: GenerationResponse = {
+          jobId,
+          status: 'ERROR',
+          message: 'Failed to check status'
+        };
+        return [errorResponse];
+      })
+    );
+  }
+  
+  getAllJobs(): Observable<JobStatus[]> {
+    return this.http.get<JobStatus[]>(`${this.apiUrl}/jobs`);
+  }
+  
+  getJobsByStatus(status: string): Observable<JobStatus[]> {
+    return this.http.get<JobStatus[]>(`${this.apiUrl}/jobs`, {
+      params: new HttpParams().set('status', status)
+    });
+  }
+  
+  getJobsByProfession(profession: string): Observable<JobStatus[]> {
+    return this.http.get<JobStatus[]>(`${this.apiUrl}/jobs`, {
+      params: new HttpParams().set('profession', profession)
+    });
+  }
+  
+  deleteJob(jobId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/jobs/${jobId}`);
+  }
+  
+  getJobUsage(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/statistics`);
+  }
+  
+  getAvailableModels(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/stable-diffusion/models`);
+  }
+  
+  setModel(modelName: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/stable-diffusion/models/${modelName}`, {});
+  }
+  
+  getProgress(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/stable-diffusion/progress`);
   }
 }

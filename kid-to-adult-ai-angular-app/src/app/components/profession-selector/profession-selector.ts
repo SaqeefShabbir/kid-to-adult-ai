@@ -1,18 +1,19 @@
-import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, Input, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ImageService, Profession } from '../../services/image.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { MatFormField, MatSelectModule } from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 import { MatTooltip } from '@angular/material/tooltip';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSliderModule } from "@angular/material/slider";
 
 @Component({
   selector: 'app-profession-selector',
-    imports: [CommonModule, MatCardModule, MatIconModule, MatSelectModule, MatTooltip, MatDividerModule, FormsModule, MatFormFieldModule, MatInputModule, MatFormField],
+    imports: [CommonModule, MatCardModule, MatIconModule, MatSelectModule, MatTooltip, MatDividerModule, FormsModule, MatFormFieldModule, MatInputModule, MatSliderModule],
   templateUrl: './profession-selector.html',
   styleUrl: './profession-selector.scss',
 })
@@ -35,11 +36,15 @@ export class ProfessionSelector implements OnInit {
     { value: 50, label: '50 years' }
   ];
 
+  ageMarkers = [20, 25, 30, 35, 40, 45, 50, 55, 60];
+  quickAges = [25, 30, 35, 40, 45, 50];
+
   constructor(private imageService: ImageService) {}
 
   ngOnInit(): void {
     this.loadProfessions();
   }
+
 
   loadProfessions(): void {
     this.imageService.getProfessions().subscribe({
@@ -69,6 +74,20 @@ export class ProfessionSelector implements OnInit {
   }
 
   onAgeChange(age: number): void {
+    this.targetAge = age;
+    this.ageChanged.emit(age);
+  }
+
+  onSliderInput(event: any): void {
+    this.targetAge = event.target.value;
+  }
+  
+  onSliderChange(event: any): void {
+    this.targetAge = event.target.value;
+    this.ageChanged.emit(this.targetAge);
+  }
+
+  selectQuickAge(age: number): void {
     this.targetAge = age;
     this.ageChanged.emit(age);
   }

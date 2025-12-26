@@ -13,11 +13,12 @@
         <div class="search-container">
           <mat-form-field appearance="outline" class="search-field">
             <mat-label>Search professions...</mat-label>
-            <!-- <input 
+            <input 
               matInput 
+              name="searchQuery"
               [(ngModel)]="searchQuery" 
               (ngModelChange)="onSearchChange($event)"
-              placeholder="Type to search"> -->
+              placeholder="Type to search">
             <mat-icon matPrefix>search</mat-icon>
             <button 
               *ngIf="searchQuery" 
@@ -87,60 +88,72 @@
             </div>
           </div>
         </div>
-        
-        <!-- Age Selector -->
-        <div class="age-selector-container">
-          <mat-divider></mat-divider>
-          
-          <div class="age-selector-header">
-            <h3>
-              <mat-icon>schedule</mat-icon>
-              Target Age
-            </h3>
-            <span class="selected-age">{{ targetAge }} years</span>
-          </div>
-          
-          <div class="age-selector">
-            <!-- Age Slider -->
-            <div class="age-slider">
-              <mat-slider
-                min="20"
-                max="60"
-                step="5"
-                [(ngModel)]="targetAge"
-                (change)="onAgeChange(targetAge)"
-                thumbLabel
-                tickInterval="5">
-              </mat-slider>
-              <div class="age-labels">
-                <span>20</span>
-                <span>30</span>
-                <span>40</span>
-                <span>50</span>
-                <span>60</span>
-              </div>
-            </div>
-            
-            <!-- Quick Age Buttons -->
-            <div class="quick-age-buttons">
-              <span class="quick-age-label">Quick Select:</span>
-              <div class="age-buttons">
-                <button 
-                  *ngFor="let option of ageOptions"
-                  mat-stroked-button 
-                  [class.selected-age-btn]="targetAge === option.value"
-                  (click)="onAgeChange(option.value)">
-                  {{ option.label }}
-                </button>
-              </div>
-            </div>
-            
-            <div class="age-hint">
-              <mat-icon>info</mat-icon>
-              <span>This age will be used to generate the adult version of the photo</span>
-            </div>
-          </div>
-        </div>
       </mat-card-content>
     </mat-card>
-  </div>
+</div>
+        
+        <!-- Age Selector -->
+        <div class="age-selector-wrapper">
+          
+          <!-- Modern Card Design -->
+          <mat-card class="age-card">
+            <mat-card-header>
+              <mat-card-title>
+                <mat-icon>schedule</mat-icon>
+                Target Age Selection
+              </mat-card-title>
+              <mat-card-subtitle>Choose the age for the adult version</mat-card-subtitle>
+            </mat-card-header>
+            
+            <mat-card-content>
+              <!-- Current Age Display -->
+              <div class="current-age-section">
+                <div class="age-badge">
+                  <span class="age-number">{{ targetAge }}</span>
+                  <span class="age-unit">years</span>
+                </div>
+                <div class="age-hint">Drag the slider or click quick ages</div>
+              </div>
+              
+              <!-- Custom Styled Slider -->
+              <div class="slider-wrapper">
+                <mat-slider
+                  class="custom-slider"
+                  min="20"
+                  max="60"
+                  step="5"
+                  [attr.value]="targetAge"
+                  (input)="onSliderInput($event)"
+                  (change)="onSliderChange($event)"
+                  thumbLabel
+                  tickInterval="5">
+                  <input matSliderThumb>
+                </mat-slider>
+                
+                <!-- Age Labels -->
+                <div class="age-markers">
+                  <div class="marker" *ngFor="let marker of ageMarkers">
+                    <div class="marker-line"></div>
+                    <span class="marker-label">{{ marker }}</span>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Quick Selection -->
+              <div class="quick-selection-section">
+                <h4>Quick Selection</h4>
+                <div class="quick-age-grid">
+                  <button 
+                    *ngFor="let age of quickAges"
+                    mat-raised-button
+                    [class]="'quick-age-btn ' + (targetAge === age ? 'selected' : '')"
+                    (click)="selectQuickAge(age)">
+                    <span class="age-icon">{{ targetAge === age ? '✓' : '' }}</span>
+                    {{ age }}
+                  </button>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      
